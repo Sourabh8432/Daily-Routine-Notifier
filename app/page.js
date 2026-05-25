@@ -82,8 +82,11 @@ export default function Home() {
       const registration = await navigator.serviceWorker.register('/sw.js');
       console.log('Service Worker registered successfully:', registration);
 
-      // 3. Subscribe to push notifications
-      const sub = await registration.pushManager.subscribe({
+      // Wait for the Service Worker to become fully active and ready
+      const readyReg = await navigator.serviceWorker.ready;
+
+      // 3. Subscribe to push notifications using the ready registration
+      const sub = await readyReg.pushManager.subscribe({
         userVisibleOnly: true,
         applicationServerKey: urlBase64ToUint8Array(vapidPublicKey)
       });
